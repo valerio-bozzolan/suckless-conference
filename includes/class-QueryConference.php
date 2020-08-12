@@ -36,7 +36,17 @@ trait QueryConferenceTrait {
 	 * @return self
 	 */
 	public function whereConference( $conference ) {
-		return $this->whereInt( $this->CONFERENCE_ID, $conference->getConferenceID() );
+		return $this->whereConferenceID( $conference->getConferenceID() );
+	}
+
+	/**
+	 * Limit to a specific Conference ID
+	 *
+	 * @param $id Conference ID
+	 * @return self
+	 */
+	public function whereConferenceID( $id ) {
+		return $this->whereInt( $this->CONFERENCE_ID, $id );
 	}
 
 	/**
