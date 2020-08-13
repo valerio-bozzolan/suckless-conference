@@ -136,3 +136,38 @@ function replace_url_args( $url, $parameters ) {
 	}
 	return http_build_get_query( $url, $parameters );
 }
+
+
+/**
+ * Eventually ask for more privileges
+ *
+ * This redirects to the login page or throws a 403 page
+ */
+function missing_privileges() {
+
+	if( is_logged() ) {
+
+		// I do not want to spend too much time in this. Just die.
+		http_response_code( 403 );
+		echo "You are not in the sudoers file. This incident will be reported. XKCD 838.";
+		exit;
+
+	} else {
+
+		// the user needs to login
+
+		// login page URL
+		$login_url = site_page( ADMIN_URL . '/login.php' );
+
+		// current page URL
+		$current_url = $_SERVER['REQUEST_URI'] ?? null;
+
+		// build the login page URL with redirect to the current page
+		$login_url = http_build_get_query( $login_url, [
+			'redirect' => $current_url,
+		] );
+
+		// temporary redirect to the login page
+		http_redirect( $login_url );
+	}
+}
