@@ -26,6 +26,9 @@ if( !defined( 'ABSPATH' ) ) {
 
 // autoload any requested conference-related class
 spl_autoload_register( function( $c ) {
+
+	// this should be:
+	//   suckless-conference/includes/class-Test.php
 	$path = __DIR__ . "/includes/class-$c.php";
 	if( is_file( $path ) ) {
 		require $path;
@@ -33,4 +36,6 @@ spl_autoload_register( function( $c ) {
 } );
 
 // load some dummy conference-related shortcuts
+// this should be:
+//    suckless-conference/includes/functions.php
 require __DIR__ . '/includes/functions.php';
