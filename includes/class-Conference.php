@@ -1,6 +1,6 @@
 <?php
 # Linux Day Torino - Construct a database conference
-# Copyright (C) 2016, 2017, 2018, 2019 Valerio Bozzolan, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -57,6 +57,23 @@ trait ConferenceTrait {
 			$url = keep_url_in_language( $url );
 		}
 		return $url;
+	}
+
+	/**
+	 *
+	 * Get the Conference edit URL
+	 *
+	 * @param  boolean $absolute Set to true to prefere an absolute URL
+	 * @return string
+	 */
+	public function getConferenceEditURL() {
+
+		// query string
+		$args = [
+			'uid' => $conference->getConferenceUID(),
+		];
+
+		return Conference::editURL( $args, $absolute );
 	}
 
 	/**
@@ -171,6 +188,13 @@ trait ConferenceTrait {
 	}
 
 	/**
+	 * Check if this Conference is editable by me
+	 */
+	public function isConferenceEditable() {
+		return has_permission( 'edit-conferences' );
+	}
+
+	/**
 	 * Normalize a Conference object
 	 */
 	protected function normalizeConference() {
@@ -274,6 +298,22 @@ class Conference extends Queried {
 	 */
 	public function __construct() {
 		$this->normalizeConference();
+	}
+
+	/**
+	 * Build the conference edit URL
+	 *
+	 * @param  array   $args     Query string arguments
+	 * @param  boolean $absolute Flag to prefere an absolute URL
+	 * @return string
+	 */
+	public static function editURL( $args = [], $absolute = false ) {
+
+		// build the base URL
+		$url = site_page( ADMIN_URL . '/conference.php', $absolute );
+
+		// append the query string
+		return http_build_get_query( $url, $args );
 	}
 
 	/**
