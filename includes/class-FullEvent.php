@@ -201,7 +201,7 @@ class FullEvent extends Queried {
 	 * @return string
 	 */
 	public static function editURL( $args, $absolute = false ) {
-		$url = http_build_get_query( '/2016/event-edit.php', $args );
-		return site_page( $url, $absolute );
+		$url = site_page( ADMIN_URL . '/edit.php', $absolute );
+		return http_build_get_query( $url, $args );
 	}
 }
