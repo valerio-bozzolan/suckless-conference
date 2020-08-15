@@ -171,3 +171,30 @@ function missing_privileges() {
 		http_redirect( $login_url );
 	}
 }
+
+/**
+ * Shortcut to require a specific permission
+ *
+ * @param string $permission
+ */
+function require_permission( $permission ) {
+
+	$problem = false;
+
+	// if the argument is a string is something like 'create-conference'
+	if( is_string( $permission ) ) {
+
+		if( !has_permission( $permission ) ) {
+			$problem = true;
+		}
+
+	// the argument is a boolean just check it
+	} elseif( !$permission ) {
+		$problem = true;
+	}
+
+	// eventually raise a problem
+	if( $problem ) {
+		missing_privileges();
+	}
+}
