@@ -46,7 +46,7 @@ if( isset( $_GET['id'] ) ) {
 	$event = ( new QueryEvent() )
 		->whereConference( $conference )
 		->joinConference()
-		->joinChapter()
+		->joinChapter( 'LEFT' )
 		->whereEventID( $_GET['id'] )
 		->queryRow();
 
@@ -251,7 +251,7 @@ if( $event ) {
 		esc_html( $conference->getConferenceTitle() ) . icon( 'home', 'left' )
 	) ?></p>
 
-	<?php if( $event ): ?>
+	<?php if( $event && $event->hasEventPermalink() ): ?>
 		<p><?= HTML::a(
 			// href
 			$event->getEventURL(),
@@ -330,11 +330,12 @@ if( $event ) {
 							foreach( $chapters as $chapter ) {
 								$option = ( new HTML( 'option' ) )
 									->setText( esc_html( $chapter->getChapterName() ) )
-									->setAttr( 'value', $chapter->getChapterID() );
+									->setAttr( 'value',  $chapter->getChapterID() );
 
 								// eventually select this chapter
 								$selected = false;
-								if( $event ) {
+
+								if( $event && $event->has( Chapter::ID ) ) {
 									$selected = $event->getChapterID() === $chapter->getChapterID();
 								} elseif( isset( $_GET['chapter'] ) ) {
 									$selected = $_GET['chapter'] === $chapter->getChapterUID();
@@ -372,7 +373,7 @@ if( $event ) {
 
 								// eventually auto-select this track
 								$selected = false;
-								if( $event ) {
+								if( $event && $event->has( Track::ID ) ) {
 									$selected = $event->getTrackID() === $track->getTrackID();
 								} elseif( isset( $_GET['track'] ) ) {
 									$selected = $_GET['track'] === $track->getTrackUID();
@@ -411,7 +412,7 @@ if( $event ) {
 
 								// eventually auto-select this room
 								$selected = false;
-								if( $event ) {
+								if( $event && $event->has( Room::ID ) ) {
 									$selected = $event->getRoomID() === $room->getRoomID();
 								} elseif( isset( $_GET['room'] ) ) {
 									$selected = $_GET['room'] === $room->getRoomUID();

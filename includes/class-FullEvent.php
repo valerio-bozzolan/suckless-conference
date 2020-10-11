@@ -1,6 +1,6 @@
 <?php
 # Linux Day 2016 - Construct a database event (full of relations)
-# Copyright (C) 2016, 2017, 2018, 2019 Valerio Bozzolan, Ludovico Pavesi, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Ludovico Pavesi, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -46,6 +46,7 @@ trait FullEventTrait {
 			$this->getConferenceUID(),
 			$this->getEventUID(),
 			$this->getChapterUID(),
+			$this->getConferenceEventsURLFormat(),
 			$absolute
 		);
 	}
@@ -184,12 +185,24 @@ class FullEvent extends Queried {
 	 * @param $conference_uid string Conference UID
 	 * @param $event_uid string Event UID
 	 * @param $chapter_uid string Chapter UID
-	 * @param string $absolute Force an absolute URL
+	 * @param $absolute string Force an absolute URL
+	 * @param $format string Permalink in printf format. Arguments: 1 Conference UID, 2 Event UID, 3 Chapter UID
 	 * @return string
 	 */
-	public static function permalink( $conference_uid, $event_uid, $chapter_uid, $absolute = false ) {
-		$url = sprintf( PERMALINK_EVENT, $conference_uid, $event_uid, $chapter_uid ) ;
+	public static function permalink( $conference_uid, $event_uid, $chapter_uid, $absolute = false, $format = null ) {
+
+		// eventually take a default format
+		if( !$format ) {
+			$format = PERMALINK_EVENT;
+		}
+
+		// make the permalink
+		$url = sprintf( $format, $conference_uid, $event_uid, $chapter_uid );
+
+		// adapt the URL for our needs
 		$url = site_page( $url, $absolute );
+
+		// eventually append I18N query string
 		return keep_url_in_language( $url );
 	}
 

@@ -51,7 +51,6 @@ class Header {
 		}
 
 		$args['og'] = array_replace( [
-			'image'  => STATIC_URL . '/ld-2016-logo-purple.png', // It's better an absolute URL here
 			'type'   => 'website',
 			'url'    => $args['url'],
 			'title'  => $args['title']

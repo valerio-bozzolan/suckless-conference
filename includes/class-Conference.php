@@ -15,6 +15,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// permalink Conference
+// %1$d: Conference ID
+// %2$s: Conference UID
+define_default( 'PERMALINK_CONFERENCE', '%2$s' );
+
 trait ConferenceTrait {
 
 	/**
@@ -36,6 +41,17 @@ trait ConferenceTrait {
 	}
 
 	/**
+	 * Get the Conference home (if any)
+	 *
+	 * Do not confuse with self#getConferenceURL() that you should use instead.
+	 *
+	 * @return string
+	 */
+	public function getConferenceHome() {
+		return $this->get( Conference::HOME );
+	}
+
+	/**
 	 * Get localized conference title
 	 *
 	 * @return string
@@ -51,11 +67,32 @@ trait ConferenceTrait {
 	 * @return string
 	 */
 	public function getConferenceURL( $absolute = false ) {
-		$url = sprintf( PERMALINK_CONFERENCE, $this->getConferenceUID() );
+
+		$url = null;
+
+		// check if the home URL is known
+		$custom_home = $this->getConferenceHome();
+		if( $custom_home ) {
+
+			// use the known home URL
+			$url = $custom_home;
+		} else {
+
+			// generate the home URL
+			$url = sprintf( PERMALINK_CONFERENCE,
+				$this->getConferenceID(),
+				$this->getConferenceUID()
+			);
+		}
+
+		// normalize this URL to our needs
 		$url = site_page( $url, $absolute );
+
+		// eventually append the i18n query string
 		if( $this->hasConferenceI18nSupport() ) {
 			$url = keep_url_in_language( $url );
 		}
+
 		return $url;
 	}
 
@@ -82,6 +119,15 @@ trait ConferenceTrait {
 	 */
 	public function hasConferenceEventsURL() {
 		return $this->has( 'conference_events_url' );
+	}
+
+	/**
+	 * Get the Conference Events URL format
+	 *
+	 * @return string
+	 */
+	public function getConferenceEventsURLFormat() {
+		return $this->get( Conference::EVENTS_URL );
 	}
 
 	function getConferenceHumanStart() {
@@ -229,6 +275,11 @@ class Conference extends Queried {
 	 * Conference UID column
 	 */
 	const UID = 'conference_uid';
+
+	/**
+	 * Conference home URL
+	 */
+	const HOME = 'conference_home';
 
 	/**
 	 * Conference title column

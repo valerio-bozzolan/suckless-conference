@@ -132,10 +132,11 @@ class QueryEvent extends Query {
 	/**
 	 * Join a table with the Chapter table
 	 *
+	 * @param string $type Join type
 	 * @return self
 	 */
-	public function joinChapter() {
-		return $this->joinOn( 'INNER', 'chapter', 'chapter.chapter_ID' , $this->CHAPTER_ID );
+	public function joinChapter( $type = 'INNER' ) {
+		return $this->joinOn( $type, 'chapter', 'chapter.chapter_ID' , $this->CHAPTER_ID );
 	}
 
 	/**

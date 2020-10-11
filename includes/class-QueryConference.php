@@ -135,7 +135,7 @@ class QueryConference extends Query {
 	public function __construct( $db = null ) {
 
 		// set database connection and default result class
-		parent::__construct( $db, Conference::class );
+		parent::__construct( $db, FullConference::class );
 
 		// set the default table
 		$this->from( Conference::T );

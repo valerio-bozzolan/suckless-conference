@@ -30,6 +30,7 @@ $TEXT_FIELDS = [
 	Conference::ACRONYM     => __( "Titolo breve" ),
 	Conference::SUBTITLE    => __( "Sottotitolo" ),
 	Conference::UID         => __( "Codice" ),
+	Conference::HOME        => __( "Pagina principale" ),
 	Conference::EVENTS_URL  => __( "URL Eventi" ),
 	Conference::PERSONS_URL => __( "URL Utenti" ),
 	Conference::START       => __( "Inizio" ) . ' YYYY-MM-DD HH:ii:ss',
