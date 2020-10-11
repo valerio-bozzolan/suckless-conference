@@ -65,7 +65,7 @@ define_default( 'LIBMARKDOWN_PATH', '/usr/share/php/markdown.php' );
 
 // default admin URL
 // this can be a complete URL or whatever but without slash at the end
-define_default( 'ADMIN_URL', 'admin' );
+define_default( 'ADMIN_BASE_URL', 'admin' );
 
 // timezone of database dates
 define_default( 'DEFAULT_TIMEZONE', 'Europe/Rome' );

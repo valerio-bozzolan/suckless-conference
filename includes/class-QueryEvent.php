@@ -55,6 +55,12 @@ trait QueryEventTrait {
 		return $this->whereStr( Event::UID, $uid );
 	}
 
+	/**
+	 * Where the Event is editable by me
+	 */
+	public function whereEventIsEditable() {
+		throw new Exception( "to be implemented" );
+	}
 }
 
 /**

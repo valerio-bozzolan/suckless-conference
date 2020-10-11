@@ -23,21 +23,20 @@ if( is_action( 'logout' ) ) {
 	logout();
 }
 
-if( is_action( 'login' ) && isset( $_POST['user_uid'], $_POST['user_password'] ) ) {
+if( is_action( 'login' ) ) {
 	login( $status );
 }
 
 switch( $status ) {
 	case Session::LOGIN_FAILED:
-		error_die("Wrong e-mail or password");
-		break;
+		die("Wrong e-mail or password");
 	case Session::USER_DISABLED:
-		error_die("User disabled");
-		break;
+		die("User disabled");
 }
 
 Header::spawn( null, [
 	'title' => __( "Login" ),
+	'home'  => false,
 ] );
 
 if( is_logged() ):

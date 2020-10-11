@@ -1,6 +1,6 @@
 <?php
 # Linux Day 2016 - Header
-# Copyright (C) 2016, 2017, 2018 Valerio Bozzolan, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Linux Day Torino website contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -70,17 +70,19 @@ class Header {
 			force_permalink( $args['url'] );
 		}
 
+		// sent the proper content type and charset
 		header('Content-Type: text/html; charset=' . CHARSET);
 
+		// declare that this page was not found
 		if( $args['not-found'] ) {
-			header('HTTP/1.1 404 Not Found');
+			http_response_code( 404 );
 		}
 
-		enqueue_css('materialize');
-		enqueue_css('materialize.custom');
-		enqueue_css('materialize.icons');
-		enqueue_js('jquery');
-		enqueue_js('materialize');
+//		enqueue_css('materialize');
+//		enqueue_css('materialize.custom');
+//		enqueue_css('materialize.icons');
+//		enqueue_js('jquery');
+//		enqueue_js('materialize');
 
 		// Close header - Start
 		$args['container'] && inject_in_module('footer', function() { ?>
@@ -99,27 +101,27 @@ class Header {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta name="generator" content="GNU nano" />
 	<link rel="copyright" href="//creativecommons.org/licenses/by-sa/4.0/" />
-	<link rel="icon" type="image/png" sizes="196x196" href="<?= STATIC_PATH ?>/favicon/favicon-192.png" />
-	<link rel="shortcut icon" href="<?= STATIC_PATH ?>/favicon/favicon.ico" />
-	<link rel="icon" sizes="16x16 32x32 64x64" href="<?= STATIC_PATH ?>/favicon/favicon.ico" />
-	<link rel="icon" type="image/png" sizes="196x196" href="<?= STATIC_PATH ?>/favicon/favicon-192.png" />
-	<link rel="icon" type="image/png" sizes="160x160" href="<?= STATIC_PATH ?>/favicon/favicon-160.png" />
-	<link rel="icon" type="image/png" sizes="96x96" href="<?= STATIC_PATH ?>/favicon/favicon-96.png" />
-	<link rel="icon" type="image/png" sizes="64x64" href="<?= STATIC_PATH ?>/favicon/favicon-64.png" />
-	<link rel="icon" type="image/png" sizes="32x32" href="<?= STATIC_PATH ?>/favicon/favicon-32.png" />
-	<link rel="icon" type="image/png" sizes="16x16" href="<?= STATIC_PATH ?>/favicon/favicon-16.png" />
-	<link rel="apple-touch-icon" href="<?= STATIC_PATH ?>/favicon/favicon-57.png" />
-	<link rel="apple-touch-icon" sizes="114x114" href="<?= STATIC_PATH ?>/favicon/favicon-114.png" />
-	<link rel="apple-touch-icon" sizes="72x72" href="<?= STATIC_PATH ?>/favicon/favicon-72.png" />
-	<link rel="apple-touch-icon" sizes="144x144" href="<?= STATIC_PATH ?>/favicon/favicon-144.png" />
-	<link rel="apple-touch-icon" sizes="60x60" href="<?= STATIC_PATH ?>/favicon/favicon-60.png" />
-	<link rel="apple-touch-icon" sizes="120x120" href="<?= STATIC_PATH ?>/favicon/favicon-120.png" />
-	<link rel="apple-touch-icon" sizes="76x76" href="<?= STATIC_PATH ?>/favicon/favicon-76.png" />
-	<link rel="apple-touch-icon" sizes="152x152" href="<?= STATIC_PATH ?>/favicon/favicon-152.png" />
-	<link rel="apple-touch-icon" sizes="180x180" href="<?= STATIC_PATH ?>/favicon/favicon-180.png" />
+	<link rel="icon" type="image/png" sizes="196x196" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-192.png" />
+	<link rel="shortcut icon" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon.ico" />
+	<link rel="icon" sizes="16x16 32x32 64x64" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon.ico" />
+	<link rel="icon" type="image/png" sizes="196x196" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-192.png" />
+	<link rel="icon" type="image/png" sizes="160x160" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-160.png" />
+	<link rel="icon" type="image/png" sizes="96x96" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-96.png" />
+	<link rel="icon" type="image/png" sizes="64x64" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-64.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-16.png" />
+	<link rel="apple-touch-icon" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-57.png" />
+	<link rel="apple-touch-icon" sizes="114x114" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-114.png" />
+	<link rel="apple-touch-icon" sizes="72x72" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-72.png" />
+	<link rel="apple-touch-icon" sizes="144x144" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-144.png" />
+	<link rel="apple-touch-icon" sizes="60x60" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-60.png" />
+	<link rel="apple-touch-icon" sizes="120x120" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-120.png" />
+	<link rel="apple-touch-icon" sizes="76x76" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-76.png" />
+	<link rel="apple-touch-icon" sizes="152x152" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-152.png" />
+	<link rel="apple-touch-icon" sizes="180x180" href="<?= ADMIN_STATIC_URL ?>/favicon/favicon-180.png" />
 	<meta name="msapplication-TileColor" content="#FFFFFF" />
-	<meta name="msapplication-TileImage" content="<?= STATIC_PATH ?>/favicon/favicon-144.png" />
-	<meta name="msapplication-config" content="<?= STATIC_PATH ?>/favicon/browserconfig.xml" />
+	<meta name="msapplication-TileImage" content="<?= ADMIN_STATIC_URL ?>/favicon/favicon-144.png" />
+	<meta name="msapplication-config" content="<?= ADMIN_STATIC_URL ?>/favicon/browserconfig.xml" />
 <?php load_module('header') ?>
 
 <?php foreach($args['og'] as $id=>$value): ?>
@@ -163,7 +165,7 @@ class Header {
 	<nav>
 		<div class="nav-wrapper purple darken-4">
 			<a class="brand-logo" href="<?= keep_url_in_language( CURRENT_CONFERENCE_PATH . _ ) ?>" title="<?php echo esc_attr(SITE_NAME) ?>">
-				<img src="<?= STATIC_PATH ?>/ld-2016-logo-64.png" alt="<?php echo esc_attr(SITE_DESCRIPTION) ?>" />
+				<img src="<?= ADMIN_STATIC_URL ?>/ld-2016-logo-64.png" alt="<?= esc_attr(SITE_DESCRIPTION) ?>" />
 			</a>
 			<a href="#" data-activates="slide-out" class="button-collapse"><?= icon('menu') ?></a>
 			<?php print_menu('root', 0, ['main-ul-intag' => 'class="right hide-on-med-and-down"']) ?>
@@ -175,9 +177,6 @@ class Header {
 		] ) ?>
 
 	</nav>
-	<div class="parallax-container">
-		<div class="parallax"><img src="<?= STATIC_PATH ?>/this-is-Wikipedia.jpg" alt="<?php echo __("This is Wikipedia") ?>"></div>
-	</div>
 
 	<?php if( $args['alert'] ) {
 		new Messagebox( $args['alert'], $args['alert.type'] );

@@ -157,7 +157,7 @@ function missing_privileges() {
 		// the user needs to login
 
 		// login page URL
-		$login_url = site_page( ADMIN_URL . '/login.php' );
+		$login_url = site_page( ADMIN_BASE_URL . '/login.php' );
 
 		// current page URL
 		$current_url = $_SERVER['REQUEST_URI'] ?? null;

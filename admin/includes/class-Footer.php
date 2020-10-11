@@ -1,6 +1,6 @@
 <?php
 # Linux Day 2016 - Footer
-# Copyright (C) 2016, 2017, 2018 Valerio Bozzolan, Rosario Antoci, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Rosario Antoci, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,8 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Footer {
-	static function spawn( $args = [] ) {
 
+	public static function spawn( $args = [] ) {
+
+		// merge default arguments
 		$args = array_replace( [
 			'home' => true
 		], $args );
@@ -27,91 +29,21 @@ class Footer {
 	<?php if( $args['home'] ): ?>
 	<div class="divider"></div>
 	<div class="section">
-		<a class="btn purple darken-3 waves-effect" href="<?= keep_url_in_language( CURRENT_CONFERENCE_PATH . _ ) ?>">
-			<?php
-				printf(
-					__("Torna a %s"),
-					SITE_NAME
-				);
-				echo icon('home', 'right');
-			?>
+		<h3><?= __( "Navigazione" ) ?></h3>
+		<a class="btn purple darken-3 waves-effect" href="<?= keep_url_in_language( ADMIN_BASE_URL . _ ) ?>">
+			<?= __( "Plancia" ) ?>
+			<?= icon('home', 'right') ?>
 		</a>
 	</div>
 	<?php endif ?>
 
 <?php load_module('footer') ?>
 
-<footer class="page-footer <?= BACK ?>">
+<footer class="page-footer">
 	<div class="container">
+
 		<div class="row">
-			<div class="col s12 m7 l8">
-				<h5 class="white-text"><code>#LDTO2016</code></h5>
-				<p class="white-text"><?php printf(
-					__("Tutti i contenuti sono rilasciati sotto ".
-					  "licenza di <strong>contenuto culturale libero</strong> %s. ".
-					  "Sei libero di distribuire e/o modificare i contenuti ".
-					  "anche per scopi commerciali, fintanto che si cita la provenienza e ".
-					  "si ricondivide sotto la medesima licenza."
-					),
-					license('cc-by-sa-4.0')->getLink('yellow-text')
-				) ?></p>
-				<p class="white-text"><?php printf(
-					__("Contattare all'indirizzo %s o al numero %s."),
-					HTML::a('mailto:'                     . CONTACT_EMAIL, CONTACT_EMAIL, null, 'white-text hoverable'),
-					HTML::a('tel:' . CONTACT_PHONE_PREFIX . CONTACT_PHONE, CONTACT_PHONE, null, 'white-text hoverable', 'target="_blank"')
-				) ?></p>
-				<p class="ld-social valign-wrapper">
-					<a class="hoverable" href="https://facebook.com/LinuxDayTorino" target="_blank" title="<?php printf(
-						__("%s su Facebook"),
-						SITE_NAME
-					) ?>">
-						<img src="<?= STATIC_PATH ?>/social/facebook.png" height="32" alt="Facebook" />
-					</a>
-
-					<a class="hoverable" href="https://twitter.com/LinuxDayTorino" target="_blank" title="<?php printf(
-						__("%s su Twitter"),
-						SITE_NAME
-					) ?>">
-						<img src="<?= STATIC_PATH ?>/social/twitter.png" height="32" alt="Twitter" class="circle white" />
-					</a>
-
-					<?= HTML::a(
-						'https://blog.linuxdaytorino.org',
-						icon('rss_feed', 'purple-text text-darken-3 ld-blog-icon'),
-						__("Blog del Linux Day Torino"),
-						'btn-floating waves-effect waves-purple white purple-text ld-blog',
-						'target="_blank"'
-					) ?>
-				</p>
-			</div>
 			<div class="col s12 m5 l4">
-				<h5 class="white-text"><?= __("Edizioni Passate") ?></h5>
-				<ul>
-					<?php $ld = function($year, $where) { ?>
-					<li><?= HTML::a(
-						"/$year/",
-						"$year, $where",
-						sprintf(
-							"Linux Day %d %s",
-							$year,
-							$where
-						),
-						'grey-text text-lighten-3 hoverable'
-					) ?></li>
-					<?php };
-
-					$ld(2015, __("Dipartimento di Biotecnologie")  );
-					$ld(2014, __("Politecnico di Torino")  );
-					$ld(2013, __("Politecnico di Torino")  );
-					$ld(2012, __("Cortile del Maglio")  );
-
-					// You want to fight about this?
-					for($year=2011; $year>2006; $year--) {
-						$ld($year, __("Cascina Roccafranca")  );
-					}
-					?>
-				</ul>
-
 				<h5 class="white-text"><?= __( "Lingua" ) ?></h5>
 				<form method="get">
 					<select name="l">
@@ -123,6 +55,7 @@ class Footer {
 				</form>
 			</div>
 		</div>
+
 		<div class="row darken-1 white-text">
 			<div class="col s12">
 				<p><small><?php

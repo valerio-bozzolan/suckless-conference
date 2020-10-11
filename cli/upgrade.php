@@ -19,8 +19,13 @@
 // allowed only from command line interface
 isset( $argv[ 0 ] ) or exit( 1 );
 
-// autoload the framework
-require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'load.php';
+// command line arguments
+$opts = getopt( 'h', [
+	'load:',
+] );
+
+// load the configuration file
+require $opts['load'] ?? '../load.php';
 
 // check if the aristocratic title is created
 safe_alter_table_add_column_after( User::T, User::ARISTOCRATIC_TITLE, 'VARCHAR(16)', User::UID );

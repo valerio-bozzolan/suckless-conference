@@ -1,6 +1,6 @@
 <?php
 # Linux Day Torino - Event
-# Copyright (C) 2016, 2017, 2018, 2019 Valerio Bozzolan, Ludovico Pavesi, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Ludovico Pavesi, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -264,6 +264,18 @@ trait EventTrait {
 	}
 
 	/**
+	 * Get the edit URL for this Event
+	 *
+	 * @param  boolean $absolute Flag to require an absolute URL
+	 * @return string
+	 */
+	public function getEventEditURL( $absolute = false ) {
+		return Event::editURL( [
+			'id' => $this->getEventID(),
+		], $absolute );
+	}
+
+	/**
 	 * Check if I can translate this Event
 	 *
 	 * @return boolean
@@ -506,5 +518,17 @@ class Event extends Queried {
 			self::DESCRIPTION  => __( "Descrizione" ),
 			self::NOTE         => __( "Note"        ),
 		];
+	}
+
+	/**
+	 * Get the edit URL to an Event
+	 *
+	 * @param  array   $args     Arguments for the edit page
+	 * @param  boolean $absolute Flag to require an absolute URL
+	 * @return string
+	 */
+	public static function editURL( $args, $absolute = false ) {
+		$url = site_page( ADMIN_BASE_URL . '/event-edit.php', $absolute );
+		return http_build_get_query( $url, $args );
 	}
 }

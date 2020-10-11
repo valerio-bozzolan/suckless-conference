@@ -60,7 +60,6 @@ trait ConferenceTrait {
 	}
 
 	/**
-	 *
 	 * Get the Conference edit URL
 	 *
 	 * @param  boolean $absolute Set to true to prefere an absolute URL
@@ -70,7 +69,7 @@ trait ConferenceTrait {
 
 		// query string
 		$args = [
-			'uid' => $conference->getConferenceUID(),
+			'id' => $this->getConferenceID(),
 		];
 
 		return Conference::editURL( $args, $absolute );
@@ -310,7 +309,7 @@ class Conference extends Queried {
 	public static function editURL( $args = [], $absolute = false ) {
 
 		// build the base URL
-		$url = site_page( ADMIN_URL . '/conference.php', $absolute );
+		$url = site_page( ADMIN_BASE_URL . '/conference.php', $absolute );
 
 		// append the query string
 		return http_build_get_query( $url, $args );

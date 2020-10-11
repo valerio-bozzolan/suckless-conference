@@ -55,6 +55,10 @@ function print_menu($uid = null, $level = 0, $args = [] ) {
 }
 
 function icon($icon = 'send', $c = null) {
+
+	// I have not time to enqueue some icons now. asd
+	return '';
+
 	if( $c !== null ) {
 		$c = " $c";
 	} else {
@@ -68,7 +72,10 @@ function die_with_404() {
 		'title' => __("È un 404! Pagina non trovata :("),
 		'not-found' => true
 	] );
-	error( __("Nott foond! A.k.a. erroro quattrociantoquatto (N.B. eseguire coi permessi di root <b>non</b> risolve la situazione!)") );
+	printf(
+		'<p>%s</p>',
+		__("Nott foond! A.k.a. erroro quattrociantoquatto (N.B. eseguire coi permessi di root <b>non</b> risolve la situazione!)")
+	);
 	new Footer();
 	exit;
 }

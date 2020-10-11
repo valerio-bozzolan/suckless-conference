@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 # Linux Day - command line interface to create an user
-# Copyright (C) 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan, Linux Day Torino contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -17,21 +17,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // allowed only from command line interface
-if( ! isset( $argv[ 0 ] ) ) {
+if( empty( $argv[ 0 ] ) ) {
 	exit( 1 );
 }
 
-// autoload the framework
-require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'load.php';
-
 // command line arguments
 $opts = getopt( 'h', [
+	'load:',
 	'uid:',
 	'role:',
 	'pwd:',
 	'force::',
 	'help',
 ] );
+
+// load the configuration file
+require $opts['load'] ?? '../load.php';
 
 // show help
 if( ! isset( $opts[ 'uid' ], $opts[ 'pwd' ], $opts[ 'role' ] ) || isset( $opts[ 'help' ] ) || isset( $opts[ 'h' ] ) ) {
@@ -68,20 +69,24 @@ if( $user && ! isset( $opts[ 'force' ] ) ) {
 $pwd = User::encryptPassword( $opts[ 'pwd' ] );
 
 if( $user ) {
-	query_update( User::T, [
-		new DBCol( User::PASSWORD,  $pwd,            's' ),
-	], sprintf(
-		'%s = %d',
-		User::ID,
-		$user->getUserID()
-	) );
+
+	( new QueryUser() )
+		->whereUser( $user )
+		->update( [
+			User::PASSWORD => $pwd,
+		] );
+
 } else {
-	insert_row( User::T, [
-		new DBCol( User::UID,       $opts[ 'uid'  ], 's' ),
-		new DBCol( User::ROLE,      $opts[ 'role' ], 's' ),
-		new DBCol( User::PASSWORD,  $pwd,            's' ),
-		new DBCol( User::IS_ACTIVE, 1,               'd' ),
-	] );
+
+	( new QueryUser() )
+		->insertRow( [
+			User::UID       => $opts[ 'uid'  ],
+			User::ROLE      => $opts[ 'role' ],
+			User::NAME      => $opts[ 'uid'  ],
+			User::SURNAME   => '',
+			User::PASSWORD  => $pwd,
+			User::IS_ACTIVE => 1,
+		] );
 }
 
 

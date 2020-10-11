@@ -1,6 +1,6 @@
 <?php
 # Linux Day Torino website
-# Copyright (C) 2016, 2017, 2018, 2019 Valerio Bozzolan, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -25,47 +25,54 @@
 require 'load.php';
 
 // inherit the Conference or specify one
-$conference_uid = CURRENT_CONFERENCE_UID;
-if( isset( $_REQUEST['conference'] ) ) {
-	$conference_uid = $_REQUEST['conference'];
-}
+$conference_uid = $_GET['conference_uid'] ?? $_POST['conference_uid'] ?? CURRENT_CONFERENCE_UID;
 
 // check if the Conference exists
-$conference = FullConference::factoryFromUID( $conference_uid )
+$conference = ( new QueryConference() )
+	->whereConferenceUID( $conference_uid )
 	->queryRow();
 
+// no Conference no party
 if( !$conference ) {
+	error( "missing conference with UID $conferene_uid" );
 	die_with_404();
 }
 
 // retrieve the Event (if existing)
 $event = null;
-if( isset( $_GET['uid'] ) ) {
+if( isset( $_GET['id'] ) ) {
+
+	// no Event no party
 	$event = ( new QueryEvent() )
 		->whereConference( $conference )
 		->joinConference()
 		->joinChapter()
-		->whereEventUID( $_GET['uid'] )
+		->whereEventID( $_GET['id'] )
 		->queryRow();
 
+	// no Event no party
 	if( !$event ) {
 		die_with_404();
 	}
 
+	// no editable no party
 	if( !$event->isEventEditable() ) {
-		error_die("Can't edit event");
+		missing_privileges();
 	}
 } else {
 	// check if there are permissions to add event
 	if( !has_permission( 'add-event' ) ) {
-		die( 'missing permissions' );
+		missing_privileges();
 	}
 }
 
 $warning = null;
 
+// check if the user submitted a form
+// check which one
 if( $_POST ) {
 
+	// the user is submitting the save form
 	if( is_action( 'save-event' ) ) {
 
 		$conference_ID = $conference->getConferenceID();
@@ -600,7 +607,7 @@ if( $event ) {
 								<div class="col s12 m6">
 									<input type="number" name="order"<?= value( $user->getEventUserOrder() ) ?>" />
 								</div>
-								<div class="col sq12 m6">
+								<div class="col s12 m6">
 									<input type="checkbox" name="delete" value="yes" id="asd-<?= $i ?>" />
 									<label for="asd-<?= $i ?>"><?= __("Elimina") ?></label>
 								</div>

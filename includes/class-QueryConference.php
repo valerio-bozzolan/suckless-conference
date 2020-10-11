@@ -91,11 +91,12 @@ trait QueryConferenceTrait {
 	 *
 	 * You can call it multiple time safely.
 	 *
+	 * @param string $join_type Join type
 	 * @return self
 	 */
-	public function joinLocation() {
+	public function joinLocation( $join_type = 'INNER' ) {
 		if( empty( $this->joinedLocation ) ) {
-			$this->joinOn( 'INNER', Location::T, $this->LOCATION_ID, 'location.location_ID' );
+			$this->joinOn( $join_type, Location::T, $this->LOCATION_ID, 'location.location_ID' );
 			$this->joinedLocation = true;
 		}
 		return $this;
