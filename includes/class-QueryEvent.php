@@ -1,6 +1,6 @@
 <?php
 # Linux Day Torino website - classes
-# Copyright (C) 2018, 2019 Valerio Bozzolan, Linux Day Torino
+# Copyright (C) 2018, 2019, 2020 Valerio Bozzolan, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -17,6 +17,9 @@
 
 // load dependent traits
 class_exists( QueryConference::class, true );
+class_exists( QueryChapter   ::class, true );
+class_exists( QueryTrack     ::class, true );
+class_exists( QueryRoom      ::class, true );
 
 /**
  * Methods for a QueryEvent class
@@ -69,6 +72,9 @@ trait QueryEventTrait {
 class QueryEvent extends Query {
 
 	use QueryEventTrait;
+	use QueryChapterTrait;
+	use QueryTrackTrait;
+	use QueryRoomTrait;
 
 	/**
 	 * Univoque Event ID column name
@@ -127,16 +133,6 @@ class QueryEvent extends Query {
 	public function whereUser( $user ) {
 		return $this->joinEventUser()
 		            ->whereInt( EventUser::USER_, $user->getUserID() );
-	}
-
-	/**
-	 * Join a table with the Chapter table
-	 *
-	 * @param string $type Join type
-	 * @return self
-	 */
-	public function joinChapter( $type = 'INNER' ) {
-		return $this->joinOn( $type, 'chapter', 'chapter.chapter_ID' , $this->CHAPTER_ID );
 	}
 
 	/**

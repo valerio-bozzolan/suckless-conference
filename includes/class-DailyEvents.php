@@ -1,6 +1,6 @@
 <?php
-# Linux Day 2016 - List events daily
-# Copyright (C) 2016, 2017 Valerio Bozzolan, Ludovico Pavesi, Linux Day Torino
+# from Linux Day 2016 - now Suckless Conference
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Ludovico Pavesi, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -21,29 +21,47 @@
 class DailyEvents {
 
 	/**
-	 * Get daily events from a conference and a chapter
+	 * Get the daily Event(s) from a Conference and a Chapter ID
+	 *
+	 * As default the Event(s) are joined with Track, Chapter and Room.
 	 *
 	 * @param $conference object Conference
 	 * @param $chapter object Chapter
-	 * @param $fields array Fields to be selected
+	 * @param $fields array Fields to be selected from the full Event object
+	 * @param $additional_conditions callable Callback that can be used to apply additional Query conditions. First argument: Query object.
 	 * @return array
 	 */
-	public static function fromConferenceChapter( $conference, $chapter, $fields = [] ) {
+	public static function fromConferenceChapter( $conference, $chapter, $fields = [], $additional_conditions = null ) {
 
 		$conference_ID = $conference->getConferenceID();
 		$chapter_ID = $chapter->getChapterID();
 
-		$events = FullEvent::factoryByConferenceChapter( $conference_ID, $chapter_ID )
+		// prepare the query
+		$events_query = ( new QueryEvent() )
+			->joinTrack()
+			->joinChapter()
+			->joinRoom()
+			->whereConferenceID( $conference_ID )
+			->whereChapterID( $chapter_ID )
 			->select( $fields )
 			->orderBy( Event::START )
-			->orderBy( Track::ORDER )
-			->queryResults();
+			->orderBy( Track::ORDER );
 
+		// check if we should apply additional conditions
+		if( $additional_conditions ) {
+			$additional_conditions( $events_query );
+		}
+
+		// query all the Events in an array
+		$events = $events_query->queryResults();
+
+		// index all the Events
 		$incremental_hour = 0;
 		$last_hour = -1;
 		$last_event_ID = -1;
 		foreach( $events as $i => $event ) {
-			// Remember that it's a JOIN with duplicates
+
+			// Remember that it's a JOIN with duplicates (TODO: untrue now I think)
 			if( $last_event_ID === $event->getEventID() ) {
 				unset( $events[ $i ] );
 				continue;
@@ -66,7 +84,8 @@ class DailyEvents {
 			// Fill `->hour`
 			$event->hour = $incremental_hour;
 
-			$last_event_ID = $event->event_ID;
+			// (TODO: remove, should work)
+			$last_event_ID = $event->getEventID();
 
 			$last_hour = $hour;
 		}
