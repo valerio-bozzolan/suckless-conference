@@ -116,7 +116,7 @@ Header::spawn( null, [
 
 	<?php foreach( Event::fields_i18n() as $field => $label ): ?>
 
-		<?php template( 'textarea-multilanguage', [
+		<?php template_admin( 'textarea-multilanguage', [
 			'event' => $event,
 			'field' => $field,
 			'label' => $label,
