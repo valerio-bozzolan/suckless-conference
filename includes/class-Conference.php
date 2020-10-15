@@ -61,6 +61,16 @@ trait ConferenceTrait {
 	}
 
 	/**
+	 * Get the Conference Acronym
+	 *
+	 * @return string
+	 */
+	public function getConferenceAcronym() {
+		return $this->get( Conference::ACRONYM );
+	}
+
+
+	/**
 	 * Get the Conference URL
 	 *
 	 * @param boolean $absolute Set to true to force an absolute URL
