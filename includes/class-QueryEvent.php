@@ -136,24 +136,6 @@ class QueryEvent extends Query {
 	}
 
 	/**
-	 * Join a table with the Track table
-	 *
-	 * @return self
-	 */
-	public function joinTrack() {
-		return $this->joinOn( 'INNER', Track::T, Track::ID_, $this->TRACK_ID );
-	}
-
-	/**
-	 * Join a table with the Room table
-	 *
-	 * @return self
-	 */
-	public function joinRoom() {
-		return $this->joinOn( 'INNER', Room::T, Room::ID_, $this->ROOM_ID );
-	}
-
-	/**
 	 * Join Events to User IDs
 	 *
 	 * You can call it multiple time safely.
