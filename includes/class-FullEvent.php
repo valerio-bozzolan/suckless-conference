@@ -46,8 +46,8 @@ trait FullEventTrait {
 			$this->getConferenceUID(),
 			$this->getEventUID(),
 			$this->getChapterUID(),
-			$this->getConferenceEventsURLFormat(),
-			$absolute
+			$absolute,
+			$this->getConferenceEventsURLFormat()
 		);
 	}
 
