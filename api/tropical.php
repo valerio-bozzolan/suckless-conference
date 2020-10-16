@@ -21,8 +21,8 @@
  * It print a (hopefully) valid iCal file of a Linux Day Torino event.
  */
 
-// load the framework
-require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'load.php';
+// require configuration file
+require 'load.php';
 
 // die if missing Conference UIR
 if( empty( $_GET['conference'] ) ) {

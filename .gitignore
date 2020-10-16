@@ -1,5 +1,6 @@
-# configuration file
-/www/load.php
+# configuration files
+/admin/load.php
+/api/load.php
 
 # GNU Gettext compiled .po files
 *.mo
