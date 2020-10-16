@@ -30,6 +30,12 @@ trait FullEventTrait {
 	 * @return bool
 	 */
 	public function hasEventPermalink() {
+
+		// if is an external URL, is easy-peasy
+		if( $this->hasEventExternalURL() ) {
+			return true;
+		}
+
 		return $this->has( Conference::UID ) &&
 		       $this->has( Event     ::UID ) &&
 		       $this->has( Chapter   ::UID );
@@ -42,6 +48,12 @@ trait FullEventTrait {
 	 * @return string
 	 */
 	public function getEventURL( $absolute = false ) {
+
+		// is this is an external Event, is easy-peasy
+		if( $this->hasEventExternalURL() ) {
+			return $this->getEventExternalURL();
+		}
+
 		return FullEvent::permalink(
 			$this->getConferenceUID(),
 			$this->getEventUID(),

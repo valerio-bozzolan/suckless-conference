@@ -36,6 +36,24 @@ trait EventTrait {
 	}
 
 	/**
+	 * Check if this Event is external or not
+	 *
+	 * @return boolean
+	 */
+	public function hasEventExternalURL() {
+		return $this->has( Event::EXTERNAL_URL );
+	}
+
+	/**
+	 * Get the Event external URL (if any)
+	 *
+	 * @return string|null
+	 */
+	public function getEventExternalURL() {
+		return $this->get( Event::EXTERNAL_URL );
+	}
+
+	/**
 	 * Get localized event title
 	 *
 	 * @return string
@@ -153,6 +171,24 @@ trait EventTrait {
 	 */
 	public function getEventImage( $absolute = false ) {
 		return site_page( $this->get( Event::IMAGE ), $absolute );
+	}
+
+	/**
+	 * Check if the Event has a language
+	 *
+	 * @return boolean
+	 */
+	public function hasEventLanguage() {
+		return $this->has( Event::LANGUAGE );
+	}
+
+	/**
+	 * Get the Event language
+	 *
+	 * @return string
+	 */
+	public function getEventLanguage() {
+		return $this->get( Event::LANGUAGE );
 	}
 
 	/**
@@ -374,6 +410,11 @@ class Event extends Queried {
 	 * UID column name
 	 */
 	const UID = 'event_uid';
+
+	/**
+	 * Event external URL
+	 */
+	const EXTERNAL_URL = 'event_url';
 
 	/**
 	 * Title column name
