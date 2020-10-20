@@ -1,6 +1,6 @@
 <?php
 # Linux Day 2016 - single user edit page
-# Copyright (C) 2016, 2017, 2018, 2019 Valerio Bozzolan, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -65,6 +65,7 @@ if( is_action( 'save-user' ) ) {
 	$data[] = new DBCol( User::LINKEDIN,      $_POST['linkedin'], 'snull' );
 	$data[] = new DBCol( User::GITHUB,        $_POST['github'],   'snull' );
 	$data[] = new DBCol( User::TWITTER,       $_POST['twitter'],  'snull' );
+	$data[] = new DBCol( User::META_WIKI,     $_POST['metawiki'], 'snull' );
 	$data[] = new DBCol( User::LOVED_LICENSE, $_POST['lovelicense'], 'snull' );
 
 	// for each language save the biography
@@ -422,6 +423,21 @@ Header::spawn( null, [
 				</div>
 			</div>
 			<!-- /image -->
+
+			<!-- Meta-wiki -->
+			<div class="col s12 m6 l4">
+				<div class="card-panel">
+					<div class="input-field">
+						<label for="user-metawiki"><?= __( "Meta-wiki" ) ?></label>
+						<input type="text" name="metawiki" id="user-metawiki"<?=
+							$user
+								? value( $user->get( User::META_WIKI ) )
+								: ''
+						?> />
+					</div>
+				</div>
+			</div>
+			<!-- /Meta-wiki -->
 
 			<!-- license -->
 			<div class="col s12 m6 l4">
