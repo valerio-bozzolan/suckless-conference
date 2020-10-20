@@ -222,6 +222,20 @@ trait UserTrait {
 	}
 
 	/**
+	 * Get the user Wikimedia Meta-wiki URL
+	 *
+	 * @return string
+	 */
+	public function getUserMetaWikiURL() {
+		$username = $this->get( User::META_WIKI );
+		$username = str_replace( ' ', '_', $username );
+		return sprintf(
+			'https://meta.wikimedia.org/wiki/User:%s',
+			$username
+		);
+	}
+
+	/**
 	 * Get the edit URL to this user
 	 *
 	 * @return string
@@ -379,6 +393,11 @@ class User extends Sessionuser {
 	const BIO = 'user_bio';
 
 	/**
+	 * Username in Meta-wiki
+	 */
+	const META_WIKI = 'user_metawiki';
+
+	/**
 	 * Complete ID column name
 	 */
 	const ID_ = self::T . DOT . self::ID;
@@ -408,6 +427,7 @@ class User extends Sessionuser {
 			User::GOOGLE_PLUS,
 			User::TWITTER,
 			User::GITHUB,
+			User::META_WIKI,
 		];
 	}
 

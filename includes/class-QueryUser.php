@@ -38,6 +38,22 @@ trait QueryUserTrait {
 		return $this->whereUserID( $id );
 	}
 
+	/**
+	 * Where the Meta-wiki username is...
+	 *
+	 * @param string $username Meta-wiki username as displayed after [[User:]] without underscores
+	 * @return self
+	 */
+	public function whereMetaUsername( $username ) {
+		return $this->whereStr( User::META_WIKI, $username );
+	}
+
+	/**
+	 * Join whatever table with the user table
+	 */
+	public function joinUser() {
+		return $this->joinOn( 'INNER', User::T, $this->USER_ID, User::ID_ );
+	}
 }
 
 /**
