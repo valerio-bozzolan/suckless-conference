@@ -321,6 +321,15 @@ trait EventTrait {
 	}
 
 	/**
+	 * Check if the Event was aborted
+	 *
+	 * @return boolean
+	 */
+	public function isEventAborted() {
+		return $this->get( Event::ABORTED );
+	}
+
+	/**
 	 * Insert subscription if not exists
 	 */
 	function addSubscription($email) {
@@ -385,7 +394,10 @@ trait EventTrait {
 			Event::START,
 			Event::END
 		);
-		$this->booleans('event_subscriptions');
+		$this->booleans(
+			'event_subscriptions',
+			Event::ABORTED
+		);
 	}
 }
 
@@ -460,6 +472,11 @@ class Event extends Queried {
 	 * Language column name
 	 */
 	const LANGUAGE = 'event_language';
+
+	/**
+	 * Check if the Event was aborted or not
+	 */
+	const ABORTED = 'event_aborted';
 
 	/**
 	 * Complete ID column name
@@ -545,6 +562,8 @@ class Event extends Queried {
 			self::START,
 			self::END,
 			self::LANGUAGE,
+			self::ABORTED,
+			self::EXTERNAL_URL,
 		];
 	}
 

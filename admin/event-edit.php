@@ -84,6 +84,8 @@ if( $_POST ) {
 		$data[] = new DBCol( Event::SUBTITLE,    $_POST['subtitle'],    's' );
 		$data[] = new DBCol( Event::START,       $_POST['start'],       's' );
 		$data[] = new DBCol( Event::END,         $_POST['end'],         's' );
+		$data[] = new DBCol( Event::EXTERNAL_URL,$_POST['url'],         's' );
+		$data[] = new DBCol( Event::ABORTED,     $_POST['aborted'],     'd' );
 		$data[] = new DBCol( Event::IMAGE,       $_POST['image'],       'snull' );
 		$data[] = new DBCol( Chapter::ID,        $_POST['chapter'],     'd' );
 		$data[] = new DBCol( Room::ID,           $_POST['room'],        'd' );
@@ -304,6 +306,17 @@ if( $event ) {
 
 			<div class="col s12 m4 l3">
 				<div class="card-panel">
+					<label for="event-url"><?= __( "URL" ) ?></label>
+					<input type="text" name="url" id="event-url"<?php
+						if( $event ) {
+							echo value( $event->get( Event::EXTERNAL_URL ) );
+						}
+					?> />
+				</div>
+			</div>
+
+			<div class="col s12 m4 l3">
+				<div class="card-panel">
 					<label for="event-language"><?= __( "Lingua" ) ?></label>
 					<input type="text" name="language" id="event-language" maxlenght="2"<?php
 						if( $event ) {
@@ -462,6 +475,20 @@ if( $event ) {
 						}
 					?> />
 				</div>
+			</div>
+
+			<div class="col s12 m4 l3">
+				<div class="card-panel">
+					<label for="event-aborted"><?= __( "Annullato" ) ?></label>
+					<select name="aborted">
+						<option value="0"<?= selected( !$event || !$event->isEventAborted() ) ?>><?= __( "No"  ) ?></option>
+						<option value="1"<?= selected(  $event && $event->isEventAborted() ) ?>><?= __( "Sì" ) ?></option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col s12">
+				<p><button type="submit" class="btn waves-effect"><?= __( "Salva" ) ?></button></p>
 			</div>
 
 		</div>
