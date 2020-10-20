@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-class_exists('Event');
 class_exists('Conference');
 class_exists('Location');
 class_exists('Room');
@@ -90,14 +89,12 @@ trait FullEventTrait {
 	/**
 	 * Get the edit URL for this FullEvent
 	 *
+	 * @deprecated
 	 * @param  boolean $absolute Flag to require an absolute URL
 	 * @return string
 	 */
 	public function getFullEventEditURL( $absolute = false ) {
-		return FullEvent::editURL( [
-			'uid'        => $this->getEventUID(),
-			'conference' => $this->getConferenceUID()
-		], $absolute );
+		return $this->getEventEditURL( $absolute );
 	}
 
 	private function factoryFullEventInSameContext() {
@@ -110,9 +107,9 @@ trait FullEventTrait {
 /**
  * An Event with all the bells and whistles
  */
-class FullEvent extends Queried {
+class FullEvent extends Event {
+
 	use FullEventTrait;
-	use EventTrait;
 	use ConferenceTrait;
 	use LocationTrait;
 	use ChapterTrait;
@@ -216,17 +213,5 @@ class FullEvent extends Queried {
 
 		// eventually append I18N query string
 		return keep_url_in_language( $url );
-	}
-
-	/**
-	 * Get the edit URL to a FullEvent
-	 *
-	 * @param  array   $args     Arguments for the edit page
-	 * @param  boolean $absolute Flag to require an absolute URL
-	 * @return string
-	 */
-	public static function editURL( $args, $absolute = false ) {
-		$url = site_page( ADMIN_BASE_URL . '/edit.php', $absolute );
-		return http_build_get_query( $url, $args );
 	}
 }
