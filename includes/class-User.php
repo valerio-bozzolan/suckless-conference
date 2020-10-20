@@ -250,10 +250,9 @@ trait UserTrait {
 	 * @return string
 	 */
 	public function getUserEditURL() {
-		$url = http_build_get_query( '2016/user-edit.php', [
+		return User::editURL( [
 			'uid' => $this->getUserUID(),
 		] );
-		return site_page( $url );
 	}
 
 	/**
@@ -481,4 +480,15 @@ class User extends Sessionuser {
 		];
 	}
 
+	/**
+	 * Get the edit URL to an User
+	 *
+	 * @param  array   $args     Arguments for the edit page
+	 * @param  boolean $absolute Flag to require an absolute URL
+	 * @return string
+	 */
+	public static function editURL( $args = [], $absolute = false ) {
+		$url = site_page( ADMIN_BASE_URL . '/user-edit.php', $absolute );
+		return http_build_get_query( $url, $args );
+	}
 }

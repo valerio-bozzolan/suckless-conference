@@ -595,7 +595,7 @@ if( $event ) {
 				</form>
 
 				<p><?= HTML::a(
-					ROOT . '/2016/user-edit.php',
+					User::editURL(),
 					sprintf(
 						__( "Aggiungi %s" ),
 						sprintf(

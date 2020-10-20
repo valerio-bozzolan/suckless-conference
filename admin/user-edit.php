@@ -104,7 +104,7 @@ if( is_action( 'save-user' ) ) {
 		->queryRow();
 
 	// POST -> redirect -> GET
-	http_redirect( $user->getUserEditURL(), 303 );
+	http_redirect( $user->getUserEditURL() );
 }
 
 /**
@@ -135,7 +135,7 @@ if( $user && is_action( 'change-image' ) ) {
 				] );
 
 			// POST-redirect-GET
-			http_redirect( $user->getUserEditURL(), 303 );
+			http_redirect( $user->getUserEditURL() );
 
 		} else {
 			die( $image->getErrorMessage() );
@@ -228,12 +228,12 @@ if( isset( $_POST['skill_uid'], $_POST['skill_score'] ) ) {
 if( $user && is_action( 'delete-user' ) ) {
 
 	// delete the user from the database
-	User::factory()
-		->whereInt( 'user_ID', $user->getUserID() )
+	( new QueryUser() )
+		->whereUser( $user )
 		->delete();
 
 	// POST -> redirect -> GET
-	http_redirect( $user->getUserEditURL(), 303 );
+	http_redirect( $user->getUserEditURL() );
 }
 
 Header::spawn( null, [
