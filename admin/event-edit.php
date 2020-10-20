@@ -128,7 +128,7 @@ if( $_POST ) {
 			->queryRow();
 
 		// POST-redirect-GET
-		http_redirect( $event->getFullEventEditURL(), 303 );
+		http_redirect( $event->getEventEditURL(), 303 );
 	}
 
 	/**
