@@ -68,11 +68,20 @@ trait UserTrait {
 	 * @return string
 	 */
 	public function getUserFullname() {
-		return sprintf(
+		return trim( sprintf(
 			__("%s %s"),
 			$this->get( User::NAME ),
 			$this->get( User::SURNAME )
-		);
+		) );
+	}
+
+	/**
+	 * Get the name that should be displayed
+	 *
+	 * @return string
+	 */
+	public function getUserDisplayName() {
+		return $this->getUserFullname();
 	}
 
 	/**
