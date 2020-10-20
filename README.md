@@ -4,6 +4,14 @@ Framework based on `suckless-php` to provide some classes useful to build conten
 
 Note that we are still doing some internal refactors. Don't be shy. Just ask.
 
+## Installation
+
+From root:
+
+```
+apt install php-markdown
+```
+
 ## Introduction
 
 This project allow the centralization of various informations during a set of conferences, while allowing completly different themes for each conference.
