@@ -25,7 +25,10 @@ $uid = isset( $_GET[ 'conference' ] )
 	? $_GET[ 'conference' ]
 	: CURRENT_CONFERENCE_UID;
 
-$conference_row = FullConference::factoryFromUID( $uid )
+// query the Conference
+$conference_row = ( new QueryConference() )
+	->joinLocation( 'LEFT' )
+	->whereConferenceUID( $uid )
 	->queryRow();
 
 if( ! $conference_row ) {
