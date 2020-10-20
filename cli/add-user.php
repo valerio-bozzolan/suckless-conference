@@ -26,13 +26,17 @@ $opts = getopt( 'h', [
 	'load:',
 	'uid:',
 	'role:',
+	'disabled',
 	'pwd:',
 	'force::',
 	'help',
 ] );
 
 // load the configuration file
-require $opts['load'] ?? '../load.php';
+require $opts['load'] ?? 'load.php';
+
+// check if the user must be disabled disabled
+$DISABLED = isset( $opts['disabled'] );
 
 // show help
 if( ! isset( $opts[ 'uid' ], $opts[ 'pwd' ], $opts[ 'role' ] ) || isset( $opts[ 'help' ] ) || isset( $opts[ 'h' ] ) ) {
@@ -46,6 +50,7 @@ if( ! isset( $opts[ 'uid' ], $opts[ 'pwd' ], $opts[ 'role' ] ) || isset( $opts[ 
 	echo "    --role=ROLE        user role ($roles_list)\n";
 	echo "    --pwd=PASSWORD     password\n";
 	echo "    --force            update the user password if exists\n";
+	echo "    --disabled         user cannot login\n";
 	echo " -h --help             show this help and exit\n";
 	exit( 0 );
 }
@@ -61,23 +66,28 @@ $user = User::factoryFromUID( $opts[ 'uid' ] )
 	->select( User::ID )
 	->queryRow();
 
-if( $user && ! isset( $opts[ 'force' ] ) ) {
+// force creation even if it exists
+if( $user && !isset( $opts[ 'force' ] ) ) {
 	printf( "User %s already exist\n", $opts[ 'uid' ] );
 	exit( 1 );
 }
 
+// encrypt the user password
 $pwd = User::encryptPassword( $opts[ 'pwd' ] );
 
 if( $user ) {
 
+	// update an existing User
 	( new QueryUser() )
 		->whereUser( $user )
 		->update( [
-			User::PASSWORD => $pwd,
+			User::PASSWORD  => $pwd,
+			User::IS_ACTIVE => $DISABLED ? 0 : 1,
 		] );
 
 } else {
 
+	// create another new User
 	( new QueryUser() )
 		->insertRow( [
 			User::UID       => $opts[ 'uid'  ],
@@ -85,7 +95,7 @@ if( $user ) {
 			User::NAME      => $opts[ 'uid'  ],
 			User::SURNAME   => '',
 			User::PASSWORD  => $pwd,
-			User::IS_ACTIVE => 1,
+			User::IS_ACTIVE => $DISABLED ? 0 : 1,
 		] );
 }
 
