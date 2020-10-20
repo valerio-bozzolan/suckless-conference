@@ -1,6 +1,6 @@
 <?php
 # Linux Day Torino website - Markdown autoloader
-# Copyright (C) 2016, 2018, 2019 Valerio Bozzolan
+# Copyright (C) 2016, 2018, 2019, 2020 Valerio Bozzolan
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -19,6 +19,13 @@ include LIBMARKDOWN_PATH;
 
 if( !file_exists( LIBMARKDOWN_PATH ) ) {
 	error_die( 'please install php-markdown package or define a different LIBMARKDOWN_PATH into your /load.php' );
+}
+
+// the default markdown library changed its behaviour
+if( !function_exists( 'markdown' ) ) {
+	function markdown( $s ) {
+		return Michelf\Markdown::defaultTransform( $s );
+	}
 }
 
 class Markdown {
