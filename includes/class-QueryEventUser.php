@@ -27,24 +27,6 @@ trait QueryEventUserTrait {
 	use QueryEventTrait;
 	use QueryUserTrait;
 
-	/*
-	 * Univoque User ID column name
-	 *
-	 * Used from EventUserTrait.
-	 *
-	 * @var
-	 */
-	protected $USER_ID = 'event_user.user_ID';
-
-	/*
-	 * Univoque Event ID column name
-	 *
-	 * Used from EventUserTrait.
-	 *
-	 * @var
-	 */
-	protected $EVENT_ID = 'event_user.event_ID';
-
 	/**
 	 * Limit to a specific EventUser
 	 *
@@ -56,6 +38,14 @@ trait QueryEventUserTrait {
 		            ->whereUser(  $event_user );
 	}
 
+	/**
+	 * Order by the EventUser order field
+	 *
+	 * @return self
+	 */
+	public function orderByEventUserOrder() {
+		return $this->orderBy( EventUser::ORDER );
+	}
 }
 
 /**
@@ -64,6 +54,20 @@ trait QueryEventUserTrait {
 class QueryEventUser extends Query {
 
 	use QueryEventUserTrait;
+
+	/**
+	* Univoque User ID column name
+	 */
+	protected $USER_ID = 'event_user.user_ID';
+
+	/*
+	 * Univoque Event ID column name
+	 *
+	 * Used from EventUserTrait.
+	 *
+	 * @var
+	 */
+	protected $EVENT_ID = 'event_user.event_ID';
 
 	/**
 	 * Constructor
