@@ -202,18 +202,21 @@ if( $_POST ) {
 
 		if( $user ) {
 			if ( !empty( $_POST['delete'] ) ) {
-				// Delete user
 
-				EventUser::delete( $event->getEventID(), $user->getUserID() );
+				// delete user
+				( new QueryEventUser() )
+					->whereEvent( $event )
+					->whereUser( $user )
+					->delete();
 
 			} elseif( isset( $_POST['order'] ) ) {
 
 				// change order
-				EventUser::factory()
-					->whereInt( Event::ID, $event->getEventID() )
-					->whereInt( User ::ID, $user->getUserID()   )
+				( new QueryEventUser() )
+					->whereEvent( $event )
+					->whereUser( $user )
 					->update( [
-						new DBCol( EventUser::ORDER, $_POST['order'], 'd')
+						new DBCol( EventUser::ORDER, $_POST['order'], 'd' )
 					] );
 			}
 		}
