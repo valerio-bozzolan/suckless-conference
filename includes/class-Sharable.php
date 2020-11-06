@@ -1,6 +1,6 @@
 <?php
 # Linux Day 2016 - Construct a database sharable
-# Copyright (C) 2016, 2017, 2018 Valerio Bozzolan, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Linux Day Torino website contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -24,6 +24,28 @@ trait SharableTrait {
 	 */
 	public function getSharableID() {
 		return $this->nonnull( Sharable::ID );
+	}
+
+	/**
+	 * Check if this Sharable has a parent
+	 *
+	 * See https://gitpull.it/T557
+	 *
+	 * @return boolean
+	 */
+	public function hasParentSharable() {
+		return $this->has( Sharable::PARENT );
+	}
+
+	/**
+	 * Get the ID of the parent Sharable (if any)
+	 *
+	 * See https://gitpull.it/T557
+	 *
+	 * @return mixed
+	 */
+	public function getParentSharableID() {
+		return $this->get( Sharable::PARENT );
 	}
 
 	/**
@@ -159,6 +181,7 @@ trait SharableTrait {
 	protected function normalizeSharable() {
 		$this->integers(
 			Sharable::ID,
+			Sharable::PARENT,
 			Event   ::ID
 		);
 	}
@@ -204,6 +227,13 @@ class Sharable extends Queried {
 	 * Sharable license column
 	 */
 	const LICENSE = 'sharable_license';
+
+	/**
+	 * Name of the parent sharable_ID column
+	 *
+	 * See https://gitpull.it/T557
+	 */
+	const PARENT = 'parent_sharable_ID';
 
 	/**
 	 * Sharable univoque ID
