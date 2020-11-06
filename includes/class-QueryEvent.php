@@ -172,14 +172,9 @@ class QueryEvent extends Query {
 	public function joinTrackChapterRoom() {
 		if( empty( $this->joinedTrackChapterRoom ) ) {
 
-			$this->from(   Room::T )
-			     ->equals( Room::ID_,    Event::ROOM_ );
-
-			$this->from(   Track::T )
-			     ->equals( Track::ID_,   Event::TRACK_ );
-
-			$this->from(   Chapter::T )
-			     ->equals( Chapter::ID_, Event::CHAPTER_ );
+			$this->joinRoom(    'LEFT' );
+			$this->joinTrack(   'LEFT' );
+			$this->joinChapter( 'LEFT' );
 
 			$this->joinedTrackChapterRoom = true;
 		}
