@@ -59,6 +59,17 @@ trait QueryEventTrait {
 	}
 
 	/**
+	 * Starting from an Event search the nearby Events happening in the same moment
+	 *
+	 * @return self
+	 */
+	public function whereEventMeanwhile( $event ) {
+		return $this->whereInt( 'event.event_ID', $event->getEventID(), '!=' )
+		            ->whereStr( 'event_start', $event->getEventEnd(   'Y-m-d H:i:s' ), '<=' )
+		            ->whereStr( 'event_end',   $event->getEventStart( 'Y-m-d H:i:s' ), '>=' );
+	}
+
+	/**
 	 * Where the Event is editable by me
 	 */
 	public function whereEventIsEditable() {
