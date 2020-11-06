@@ -23,21 +23,38 @@ class_exists('Track');
 
 trait FullEventTrait {
 
+	public function hasEventStandardURL() {
+		return $this->has( Conference::UID ) &&
+		       $this->has( Event     ::UID ) &&
+		       $this->has( Chapter   ::UID );
+	}
+
 	/**
 	 * Check if the Event has a permalink
 	 *
 	 * @return bool
 	 */
 	public function hasEventPermalink() {
+		return $this->hasEventExternalURL() || $this->hasEventStandardURL();
+	}
 
-		// if is an external URL, is easy-peasy
-		if( $this->hasEventExternalURL() ) {
-			return true;
-		}
-
-		return $this->has( Conference::UID ) &&
-		       $this->has( Event     ::UID ) &&
-		       $this->has( Chapter   ::UID );
+	/**
+	 * Get the Event standard URL
+	 *
+	 * The standard URL is the opposite of the external URL.
+	 *
+	 * @param  boolean $absolute
+	 * @return string
+	 */
+	public function getEventStandardURL( $absolute = null ) {
+		return FullEvent::permalink(
+			$this->getConferenceUID(),
+			$this->getEventUID(),
+			$this->getChapterUID(),
+			$absolute,
+			$this->getConferenceEventsURLFormat(),
+			$this->hasConferenceI18nSupport()
+		);
 	}
 
 	/**
@@ -48,18 +65,16 @@ trait FullEventTrait {
 	 */
 	public function getEventURL( $absolute = false ) {
 
+		if( $this->hasEventStandardURL() ) {
+			return $this->getEventStandardURL( $absolute );
+		}
+
 		// is this is an external Event, is easy-peasy
 		if( $this->hasEventExternalURL() ) {
 			return $this->getEventExternalURL();
 		}
 
-		return FullEvent::permalink(
-			$this->getConferenceUID(),
-			$this->getEventUID(),
-			$this->getChapterUID(),
-			$absolute,
-			$this->getConferenceEventsURLFormat()
-		);
+		return '#';
 	}
 
 	/**
@@ -196,9 +211,10 @@ class FullEvent extends Event {
 	 * @param $chapter_uid string Chapter UID
 	 * @param $absolute string Force an absolute URL
 	 * @param $format string Permalink in printf format. Arguments: 1 Conference UID, 2 Event UID, 3 Chapter UID
+	 * @param $jass_i18n_support Check if the Conference has I18n support
 	 * @return string
 	 */
-	public static function permalink( $conference_uid, $event_uid, $chapter_uid, $absolute = false, $format = null ) {
+	public static function permalink( $conference_uid, $event_uid, $chapter_uid, $absolute = false, $format = null, $has_i18n_support = true ) {
 
 		// eventually take a default format
 		if( !$format ) {
@@ -212,6 +228,10 @@ class FullEvent extends Event {
 		$url = site_page( $url, $absolute );
 
 		// eventually append I18N query string
-		return keep_url_in_language( $url );
+		if( $has_i18n_support ) {
+			$url = keep_url_in_language( $url );
+		}
+
+		return $url;
 	}
 }

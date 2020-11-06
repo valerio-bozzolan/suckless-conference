@@ -128,7 +128,7 @@ trait ConferenceTrait {
 	 * @return boolean
 	 */
 	public function hasConferenceEventsURL() {
-		return $this->has( 'conference_events_url' );
+		return $this->has( Conference::EVENTS_URL );
 	}
 
 	/**
@@ -138,6 +138,24 @@ trait ConferenceTrait {
 	 */
 	public function getConferenceEventsURLFormat() {
 		return $this->get( Conference::EVENTS_URL );
+	}
+
+	/**
+	 * Check if the Conference has custom URLs for Rooms
+	 *
+	 * @return boolean
+	 */
+	public function hasConferenceRoomsURL() {
+		return $this->has( Conference::EVENTS_URL );
+	}
+
+	/**
+	 * Get the Conference Rooms URL format
+	 *
+	 * @return string
+	 */
+	public function getConferenceRoomsURLFormat() {
+		return $this->get( Conference::ROOMS_URL );
 	}
 
 	function getConferenceHumanStart() {
@@ -163,12 +181,30 @@ trait ConferenceTrait {
 	}
 
 	/**
+	 * Check if the Conference supports some languages
+	 *
+	 * @return boolean
+	 */
+	public function hasConferenceLanguages() {
+		return $this->has( Conference::LANGS );
+	}
+
+	/**
+	 * Check if the Conference supports some languages
+	 *
+	 * @return array
+	 */
+	public function getConferenceLanguages() {
+		return explode( ',', $this->get( Conference::LANGS ) );
+	}
+
+	/**
 	 * Check if this Conference has the internationalization support
 	 *
 	 * @return boolean
 	 */
 	public function hasConferenceI18nSupport() {
-		return $this->hasConferenceEventsURL();
+		return $this->hasConferenceEventsURL() && $this->hasConferenceLanguages();
 	}
 
 	/**
@@ -317,6 +353,11 @@ class Conference extends Queried {
 	const END = 'conference_end';
 
 	/**
+	 * Conference languages
+	 */
+	const LANGS = 'conference_langs';
+
+	/**
 	 * Acronym column name
 	 */
 	const ACRONYM = 'conference_acronym';
@@ -330,6 +371,11 @@ class Conference extends Queried {
 	 * Events URL column name
 	 */
 	const EVENTS_URL = 'conference_events_url';
+
+	/**
+	 * Events URL column name
+	 */
+	const ROOMS_URL = 'conference_rooms_url';
 
 	/**
 	 * Days column name
@@ -395,6 +441,7 @@ class Conference extends Queried {
 			self::PERSONS_URL,
 			self::EVENTS_URL,
 			self::DAYS,
+			self::LANGS,
 		];
 	}
 
