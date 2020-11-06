@@ -82,9 +82,9 @@ trait FullEventTrait {
 	 *
 	 * @return Query
 	 */
-	public function factoryNextFullEvent() {
+	public function factoryNextFullEvent( $args = [] ) {
 		$date = $this->getEventEnd( 'Y-m-d H:i:s' );
-		return $this->factoryFullEventInSameContext()
+		return $this->factoryFullEventInSameContext( $args )
 			->whereStr( 'event_start', $date, '>=' )
 			->orderBy(  'event_start', 'ASC' );
 	}
@@ -94,11 +94,23 @@ trait FullEventTrait {
 	 *
 	 * @return Query
 	 */
-	public function factoryPreviousFullEvent( $compare = '<=' ) {
+	public function factoryPreviousFullEvent( $args = [] ) {
 		$date = $this->getEventStart( 'Y-m-d H:i:s' );
-		return $this->factoryFullEventInSameContext()
+		return $this->factoryFullEventInSameContext( $args )
 			->whereStr( 'event_end', $date, '<=' )
 			->orderBy(  'event_end', 'DESC' );
+	}
+
+	/**
+	 * Check the FullEvents happening in the meanwhile of another Event
+	 *
+	 * @return Query
+	 */
+	public function factoryMeanwhileFullEvent() {
+		return ( new QueryEvent() )
+			->joinConference()
+			->joinTrackChapterRoom()
+			->whereEventMeanwhile( $this );
 	}
 
 	/**
@@ -112,10 +124,15 @@ trait FullEventTrait {
 		return $this->getEventEditURL( $absolute );
 	}
 
-	private function factoryFullEventInSameContext() {
-		return FullEvent::factory()
-			->whereInt( 'event.conference_ID', $this->getConferenceID() )
-			->whereInt( 'event.room_ID',       $this->getRoomID() );
+	private function factoryFullEventInSameContext( $args = [] ) {
+		$query = FullEvent::factory()
+			->whereConference( $this );
+
+		if( empty( $args['whatever-room'] ) || !$args['whatever-room'] ) {
+			$query->whereRoom( $this );
+		}
+
+		return $query;
 	}
 }
 
