@@ -41,6 +41,16 @@ trait QueryRoomTrait {
 	}
 
 	/**
+	 * Where the Room UID is...
+	 *
+	 * @param  string $uid Room ID
+	 * @return self
+	 */
+	public function whereRoomUID( $uid ) {
+		return $this->whereStr( Room::UID, $uid );
+	}
+
+	/**
 	 * Join a generic table with the Room table
 	 *
 	 * @param string $type Join type
@@ -58,7 +68,7 @@ trait QueryRoomTrait {
 /**
  * Utility used to Query a Room.
  */
-class QueryRoom {
+class QueryRoom extends Query {
 
 	use QueryRoomTrait;
 
