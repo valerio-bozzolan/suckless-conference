@@ -42,7 +42,7 @@ class HumanTime {
 
 		if( $to === null ) {
 			$to = new DateTime('now');
-        }
+	        }
 
 		$diff = $from->diff( $to );
 
@@ -146,7 +146,14 @@ class HumanTime {
 		if( $d_fake === 1 ) {
 			$args['complete'] = true;
 
-			return $invert ? __("domani") : _("ieri");
+			if( $invert ) {
+				return sprintf(
+					__( "domani alle %s" ),
+					$from->format( 'H:i' )
+				);
+			}
+
+			return __( "ieri" );
 		}
 
 		// Today
@@ -160,7 +167,10 @@ class HumanTime {
 		if( $h_fake > 3 ) {
 			$args['complete'] = true;
 
-			return __("oggi");
+			return sprintf(
+				__( "oggi alle %s" ),
+				$from->format( 'H:i' ),
+			);
 		}
 
 		if( $h > 1 ) {
