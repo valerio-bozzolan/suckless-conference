@@ -73,7 +73,7 @@ trait QuerySharableTrait {
 	 * @return self
 	 */
 	public function whereSharableParent( $sharable ) {
-		return $this->whereSharableParentID( $sharable->getSharableParentID() );
+		return $this->whereSharableParentID( $sharable->getSharableID() );
 	}
 
 	/**
@@ -84,6 +84,22 @@ trait QuerySharableTrait {
 	 */
 	public function whereSharableParentID( $id ) {
 		return $this->whereInt( Sharable::PARENT, $id );
+	}
+
+	/**
+	 * Select a field called 'has_sharable_children'
+	 *
+	 * @return self
+	 */
+	public function selectSharableHasChildren( $alias = 'sharable_has_children' ) {
+
+		// check if it exists another Sharable with this row as its parent
+		$temp_subquery_alias = 'sharable_children';
+		$subquery = ( new QuerySharable( null, $temp_subquery_alias ) )
+			->equals( $temp_subquery_alias . DOT . Sharable::PARENT, Sharable::ID_ )
+			->getQuery();
+
+		return $this->select( "EXISTS( $subquery ) $alias");
 	}
 
 }
@@ -109,13 +125,13 @@ class QuerySharable extends Query {
 	 * @param DB     $db    Database or NULL for the default one
 	 * @param string $alias Table alias
 	 */
-	public function __construct() {
+	public function __construct( $db = null, $alias = true ) {
 
 		// initialize Query
 		parent::__construct();
 
 		// select default table
-		$this->from( Sharable::T );
+		$this->fromAlias( Sharable::T, $alias );
 
 		// select default result class name
 		$this->defaultClass( Sharable::class );

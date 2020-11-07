@@ -33,7 +33,7 @@ trait SharableTrait {
 	 *
 	 * @return boolean
 	 */
-	public function hasParentSharable() {
+	public function hasSharableParent() {
 		return $this->has( Sharable::PARENT );
 	}
 
@@ -44,7 +44,7 @@ trait SharableTrait {
 	 *
 	 * @return mixed
 	 */
-	public function getParentSharableID() {
+	public function getSharableParentID() {
 		return $this->get( Sharable::PARENT );
 	}
 
@@ -264,5 +264,22 @@ class Sharable extends Queried {
 	public static function factoryByEvent( $event_ID ) {
 		return ( new QuerySharable )
 			->whereEventID( $event_ID );
+	}
+
+	/**
+	 * All basic fields
+	 *
+	 * @return array
+	 */
+	public static function fields() {
+		return [
+			self::ID_,
+			self::TITLE,
+			self::TYPE,
+			self::PATH,
+			self::MIME,
+			self::LICENSE,
+			self::PARENT,
+		];
 	}
 }
