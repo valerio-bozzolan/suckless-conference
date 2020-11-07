@@ -148,6 +148,9 @@ trait SharableTrait {
 		return ! $this->isSharableIframe();
 	}
 
+	/**
+	 * @TODO: $base = ROOT is wrong and should be $absolute = false
+	 */
 	function getSharablePath( $base = ROOT ) {
 		$type = $this->get( Sharable::TYPE );
 		$path = $this->get( Sharable::PATH );
@@ -233,7 +236,7 @@ class Sharable extends Queried {
 	 *
 	 * See https://gitpull.it/T557
 	 */
-	const PARENT = 'parent_sharable_ID';
+	const PARENT = 'sharable_parent';
 
 	/**
 	 * Sharable univoque ID
@@ -259,7 +262,7 @@ class Sharable extends Queried {
 	 * @return Query
 	 */
 	public static function factoryByEvent( $event_ID ) {
-		return self::factory()
-			->whereInt( Sharable::EVENT_, $event_ID );
+		return ( new QuerySharable )
+			->whereEventID( $event_ID );
 	}
 }
