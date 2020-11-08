@@ -228,7 +228,17 @@ if( $_POST ) {
 	// http_redirect( $_SERVER[ 'REQUEST_URI' ], 303 );
 }
 
+// Event's Sharable(s)
+$sharables = [];
+
 if( $event ) {
+
+	// query all the Sharable(s) related to this Event
+	$sharables =
+		( new QuerySharable() )
+			->whereEvent( $event )
+			->queryGenerator();
+
 	Header::spawn( null, [
 		'title' => sprintf(
 			__("Modifica %s: %s"),
@@ -661,6 +671,33 @@ if( $event ) {
 		<?php endif ?>
 	<?php endif ?>
 
+	<!-- start Sharables -->
+	<?php if( $event && $sharables ): ?>
+
+		<h3><?= __( "Materiali condivisi" ) ?></h3>
+
+		<ul class="collection">
+
+			<?php foreach( $sharables as $sharable ): ?>
+				<li class="collection-item"><?= HTML::a(
+					$sharable->getSharableEditURL(),
+					esc_html( $sharable->getSharableTitle() )
+				) ?></li>
+			<?php endforeach ?>
+
+			<!-- start add Sharable -->
+			<li><?= HTML::a(
+				Sharable::editURL( [
+					'event_ID' => $event->getEventID(),
+				]  ),
+				__( "Aggiungi" )
+			) ?></li>
+			<!-- end add Sharable -->
+
+		</ul>
+
+	<?php endif ?>
+	<!-- end Sharables -->
 <?php
 
 Footer::spawn();

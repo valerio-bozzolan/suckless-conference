@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// load dependent traits
+class_exists( Event::class, true );
+
 trait SharableTrait {
 
 	/**
@@ -179,6 +182,17 @@ trait SharableTrait {
 	}
 
 	/**
+	 * Get the Sharable edit URL
+	 *
+	 * @return self
+	 */
+	public function getSharableEditURL() {
+		return Sharable::editURL( [
+			'id' => $this->getSharableID(),
+		] );
+	}
+
+	/**
 	 * Normalize a Sharable object
 	 */
 	protected function normalizeSharable() {
@@ -194,7 +208,9 @@ trait SharableTrait {
  * A Sharable is an attachment related to a Talk
  */
 class Sharable extends Queried {
+
 	use SharableTrait;
+	use EventTrait;
 
 	/**
 	 * Database table name
@@ -253,6 +269,7 @@ class Sharable extends Queried {
 	 */
 	public function __construct() {
 		$this->normalizeSharable();
+		$this->normalizeEvent();
 	}
 
 	/**
@@ -281,5 +298,16 @@ class Sharable extends Queried {
 			self::LICENSE,
 			self::PARENT,
 		];
+	}
+
+	/**
+	 * Create the Sharable edit URL
+	 *
+	 * @param array $args
+	 * @return string
+	 */
+	public static function editURL( $args ) {
+		$url = site_page( ADMIN_BASE_URL . '/sharable.php' );
+		return http_build_get_query( $url, $args );
 	}
 }

@@ -113,6 +113,13 @@ class QuerySharable extends Query {
 	use QueryEventTrait;
 
 	/**
+	 * Univoque Sharable ID column name
+	 *
+	 * @var
+	 */
+	protected $SHARABLE_ID = 'sharable.sharable_ID';
+
+	/**
 	 * Univoque Event ID column name
 	 *
 	 * @var
