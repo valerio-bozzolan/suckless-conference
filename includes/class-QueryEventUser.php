@@ -39,6 +39,34 @@ trait QueryEventUserTrait {
 	}
 
 	/**
+	 * Where the EventUser role is...
+	 *
+	 * @param string $role
+	 * @return self
+	 */
+	public function whereEventUserRole( $role ) {
+		return $this->whereStr( EventUser::ROLE, $role );
+	}
+
+	/**
+	 * Where the EventUser is a moderator
+	 *
+	 * @return self
+	 */
+	public function whereEventUserIsModerator() {
+		return $this->whereEventUserRole( 'moderator' );
+	}
+
+	/**
+	 * Where the EventUser is a speaker
+	 *
+	 * @return self
+	 */
+	public function whereEventUserIsSpeaker() {
+		return $this->whereEventUserRole( 'speaker' );
+	}
+
+	/**
 	 * Order by the EventUser order field
 	 *
 	 * @return self

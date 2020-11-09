@@ -1,6 +1,6 @@
 <?php
 # Linux Day 2016 - Construct a database event-user relaction
-# Copyright (C) 2016, 2017, 2018 Valerio Bozzolan, Linux Day Torino
+# Copyright (C) 2016, 2017, 2018, 2019, 2020 Valerio Bozzolan, Linux Day Torino
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -24,6 +24,38 @@ trait EventUserTrait {
 	 */
 	public function getEventUserOrder() {
 		return $this->get( EventUser::ORDER );
+	}
+
+	/**
+	 * Get the event user order
+	 *
+	 * @return int
+	 */
+	public function getEventUserRole() {
+		return $this->get( EventUser::ROLE );
+	}
+
+	/**
+	 * Get the event user order
+	 *
+	 * @param string $gender
+	 * @return int
+	 */
+	public function getEventUserRoleHuman( $gender = 'm' ) {
+
+		$f = $gender === 'f';
+
+		$role = $this->getEventUserRole();
+
+		if( $role === 'moderator' ) {
+			return $f ? __( "moderatrice" ) : __( "moderatore" );
+		}
+
+		if( $role === 'speaker' ) {
+			return $f ? __( "relatrice" ) : __( "relatore" );
+		}
+
+		return '?';
 	}
 
 	/**
@@ -83,9 +115,26 @@ class EventUser extends Queried {
 	const ORDER = 'event_user_order';
 
 	/**
+	 * User role column name
+	 */
+	const ROLE = 'event_user_role';
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		$this->normalizeEventUser();
+	}
+
+	/**
+	 * Get an array of EventUser roles
+	 *
+	 * @return array
+	 */
+	public static function roles() {
+		return [
+			'speaker',
+			'moderator',
+		];
 	}
 }

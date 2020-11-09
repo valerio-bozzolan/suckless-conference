@@ -211,14 +211,15 @@ if( $_POST ) {
 					->whereUser( $user )
 					->delete();
 
-			} elseif( isset( $_POST['order'] ) ) {
+			} elseif( isset( $_POST['order'], $_POST['role'] ) ) {
 
 				// change order
 				( new QueryEventUser() )
 					->whereEvent( $event )
 					->whereUser( $user )
 					->update( [
-						new DBCol( EventUser::ORDER, $_POST['order'], 'd' )
+						new DBCol( EventUser::ORDER, $_POST['order'], 'd' ),
+						new DBCol( EventUser::ROLE,  $_POST['role'],  's' ),
 					] );
 			}
 		}
@@ -624,6 +625,7 @@ if( $event ) {
 			->select( [
 				User::UID,
 				EventUser::ORDER,
+				EventUser::ROLE,
 			] )
 			->defaultClass( EventUser::class )
 			->orderBy( EventUser::ORDER )
@@ -647,6 +649,16 @@ if( $event ) {
 								</div>
 								<div class="col s12 m6">
 									<input type="number" name="order"<?= value( $user->getEventUserOrder() ) ?>" />
+								</div>
+								<div class="col s12 m6">
+									<select name="role">
+										<?php foreach( EventUser::roles() as $role ): ?>
+											<option<?=
+												value( $role ) .
+												selected( $role === $user->getEventUserRole() )
+											?>><?= esc_html( $role ) ?></option>
+										<?php endforeach ?>
+									</select>
 								</div>
 								<div class="col s12 m6">
 									<input type="checkbox" name="delete" value="yes" id="asd-<?= $i ?>" />
