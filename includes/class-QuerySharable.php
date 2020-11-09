@@ -106,10 +106,9 @@ trait QuerySharableTrait {
 		// check if it exists another Sharable with this row as its parent
 		$temp_subquery_alias = 'sharable_children';
 		$subquery = ( new QuerySharable( null, $temp_subquery_alias ) )
-			->equals( $temp_subquery_alias . DOT . Sharable::PARENT, Sharable::ID_ )
-			->getQuery();
+			->equals( $temp_subquery_alias . DOT . Sharable::PARENT, Sharable::ID_ );
 
-		return $this->select( "EXISTS( $subquery ) $alias");
+		return $this->selectExists( $subquery, $alias );
 	}
 
 }
