@@ -70,6 +70,42 @@ trait QueryEventTrait {
 	}
 
 	/**
+	 * Select a field saying if the Event has a Sharable
+	 *
+	 * @param  string   $field    Name of this column
+	 * @param  callable $callback Callable with a QuerySharable as first argument
+	 * @return self
+	 */
+	public function selectEventHasSharable( $field = 'event_has_sharable', $callback = null ) {
+
+		// subquery to check if this Event has a Sharable
+		$has_sharable = ( new QuerySharable() )
+			->equals( $this->EVENT_ID, Sharable::EVENT_ );
+
+		// eventually append other constraints
+		if( $callback ) {
+			$callback( $has_sharable );
+		}
+
+		// build the 'SELECT EXISTS( ... ) AS field'
+		return $this->selectExists( $has_sharable, $field );
+	}
+
+	/**
+	 * Select a field saying if the Event has a video
+	 *
+	 * @param  string   $field    Name of this column
+	 * @return self
+	 */
+	public function selectEventHasVideo( $field = 'event_has_video' ) {
+		return $this->selectEventHasSharable( $field, function( $query_sharable ) {
+
+			// limit only to the videos
+			$query_sharable->whereSharableType( 'video' );
+		} );
+	}
+
+	/**
 	 * Where the Event is editable by me
 	 */
 	public function whereEventIsEditable() {

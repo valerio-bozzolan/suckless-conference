@@ -44,6 +44,16 @@ trait QuerySharableTrait {
 	}
 
 	/**
+	 * Where the Sharable type is
+	 *
+	 * @param string $type
+	 * @return self
+	 */
+	public function whereSharableType( $type ) {
+		return $this->whereStr( Sharable::TYPE, $type );
+	}
+
+	/**
 	 * Where the Sharable has a parent
 	 *
 	 * @param boolean $has Set to false to have not a parent
