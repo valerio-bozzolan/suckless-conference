@@ -95,6 +95,9 @@ if( is_action( 'save-sharable' ) ) {
 			->update( $data );
 	} else {
 
+		// remember the Event ID
+		$data[ Event::ID ] = $event_ID;
+
 		// insert a new one
 		( new QuerySharable() )
 			->insertRow( $data );
