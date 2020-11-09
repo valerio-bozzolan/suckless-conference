@@ -78,7 +78,7 @@ if( is_action( 'save-sharable' ) ) {
 	// read and sanitize POST data
 	foreach( $EDITABLE_FIELDS as $field ) {
 
-		$v = luser_input( $_POST[ $field ] ?? '', 128 );
+		$v = luser_input( $_POST[ $field ] ?? '', 254 );
 		if( !$v ) {
 			$v = null;
 		}
