@@ -111,6 +111,15 @@ trait QueryEventTrait {
 	public function whereEventIsEditable() {
 		throw new Exception( "to be implemented" );
 	}
+
+	/**
+	 * Join whatever table with the Event one
+	 *
+	 * @param string $type Join type
+	 */
+	public function joinEvent( $type = 'INNER' ) {
+		return $this->joinOn( $type, Event::T, $this->EVENT_ID, Event::ID_ );
+	}
 }
 
 /**
