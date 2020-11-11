@@ -75,8 +75,11 @@ trait SharableTrait {
 	 */
 	public function getDefaultSharableTitle( $args = [] ) {
 
+		// document, video, youtube, ...
 		$sharable_type = $this->get( Sharable::TYPE );
 
+		// in case of a YouTube URL is not feasible to get an useful
+		// information from the URL, so the default title is something else
 		if( $sharable_type === 'youtube' ) {
 			if( isset( $args['prop'] ) && $args['prop'] ) {
 				return sprintf( __("il %s"), __("video esterno") );
@@ -85,14 +88,11 @@ trait SharableTrait {
 			}
 		}
 
+		// URL or relative pathname
 		$sharable_path = $this->get( Sharable::PATH );
 
-		// Get filename from "/asd/asd/asd/(filename)"
-		$i = 0;
-		while( strpos( $sharable_path, _, $i ) !== false ) {
-			$i++;
-		}
-		return substr( $sharable_path, $i );
+		// just the filename and not its path
+		return basename( $sharable_path );
 	}
 
 	/**
