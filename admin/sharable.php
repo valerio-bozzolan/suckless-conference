@@ -38,12 +38,11 @@ $sharable = null;
 $sharable_ID = $_GET['id'] ?? 0;
 $sharable_ID = (int) $sharable_ID;
 
-$event_ID = null;
-
 if( $sharable_ID ) {
 
 	$sharable = ( new QuerySharable() )
 		->whereSharableID( $sharable_ID )
+		->joinEvent()
 		->queryRow();
 
 	// no Sharable no party
@@ -56,7 +55,8 @@ if( $sharable_ID ) {
 // check if it exists
 if( $sharable ) {
 
-	$event_ID = $sharable->getEventID();
+	// the Event is inherited from the Sharable
+	$event = $sharable;
 
 } else {
 
@@ -65,7 +65,18 @@ if( $sharable ) {
 
 	// no Event no party
 	if( !$event_ID ) {
-		throw new Exception( "missing Event" );
+		throw new Exception( "missing Event ID" );
+	}
+
+	// check if the Event exists
+	$event = ( new QueryEvent() )
+		->whereEventID( $event_ID )
+		->queryRow();
+
+	// no Event no party
+	if( !$event ) {
+		error( "missing Event with ID $event_ID" );
+		die_with_404();
 	}
 }
 
@@ -96,7 +107,7 @@ if( is_action( 'save-sharable' ) ) {
 	} else {
 
 		// remember the Event ID
-		$data[ Event::ID ] = $event_ID;
+		$data[ Event::ID ] = $event->getEventID();
 
 		// insert a new one
 		( new QuerySharable() )
@@ -117,6 +128,16 @@ Header::spawn( null, [
 ] );
 
 ?>
+
+	<div class="card-panel">
+		<?= sprintf(
+			__( "Parte di: %s." ),
+			HTML::a(
+				$event->getEventEditURL(),
+				esc_html( $event->getEventTitle() )
+			)
+		) ?>
+	</div>
 
 	<form method="post">
 
