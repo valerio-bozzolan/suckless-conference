@@ -231,6 +231,7 @@ if( $_POST ) {
 
 // Event's Sharable(s)
 $sharables = [];
+$users     = [];
 
 if( $event ) {
 
@@ -239,6 +240,19 @@ if( $event ) {
 		( new QuerySharable() )
 			->whereEvent( $event )
 			->queryGenerator();
+
+	// users
+	$users = $event->factoryUserByEvent()
+		->select( [
+			User::UID,
+			User::NAME,
+			User::SURNAME,
+			EventUser::ORDER,
+			EventUser::ROLE,
+		] )
+		->defaultClass( EventUser::class )
+		->orderBy( EventUser::ORDER )
+		->queryResults();
 
 	Header::spawn( null, [
 		'title' => sprintf(
@@ -587,7 +601,7 @@ if( $event ) {
 				<form action="" method="post">
 					<?php form_action( 'add-user' ) ?>
 					<select name="user" class="browser-default">
-						<?php $users = User::factory()
+						<?php $all_users = User::factory()
 							->select( [
 								User::UID,
 								User::NAME,
@@ -596,7 +610,7 @@ if( $event ) {
 							->orderBy( User::NAME )
 							->queryGenerator();
 						?>
-						<?php foreach( $users as $user ): ?>
+						<?php foreach( $all_users as $user ): ?>
 							<option value="<?= $user->getUserUID() ?>">
 								<?= esc_html( $user->getUserFullname() ) ?>
 							</option>
@@ -621,18 +635,8 @@ if( $event ) {
 	<?php endif ?>
 
 	<?php if( $event ): ?>
-		<?php $users = $event->factoryUserByEvent()
-			->select( [
-				User::UID,
-				EventUser::ORDER,
-				EventUser::ROLE,
-			] )
-			->defaultClass( EventUser::class )
-			->orderBy( EventUser::ORDER )
-			->queryGenerator();
-		?>
 
-		<?php if( $users->valid() ): ?>
+		<?php if( $users ): ?>
 			<h3><?php printf(
 				__( "Modifica %s" ),
 				__( "Ordinamento" )
@@ -710,6 +714,23 @@ if( $event ) {
 
 	<?php endif ?>
 	<!-- end Sharables -->
+
+	<!-- start FFmpeg parameters -->
+	<?php if( $event ): ?>
+
+		<p><?= __( "Command to set video metadata with ffmpeg:" ) ?></p>
+		<textarea><?= esc_html( VideoMetadata::command( [
+			'conference' => $conference,
+			'event'      => $event,
+			'users'      => $users,
+			'input'      => 'video.mp4',
+			'metadata'   => [
+				'license' => 'CC BY SA 4.0',
+			],
+		] ) ) ?></textarea>
+
+	<?php endif ?>
+	<!-- end FFmpeg parameters -->
 <?php
 
 Footer::spawn();
